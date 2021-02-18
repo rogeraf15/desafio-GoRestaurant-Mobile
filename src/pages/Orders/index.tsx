@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ForwardRefExoticComponent, useEffect, useState } from 'react';
 import { Image } from 'react-native';
 
 import api from '../../services/api';
@@ -32,7 +32,14 @@ const Orders: React.FC = () => {
 
   useEffect(() => {
     async function loadOrders(): Promise<void> {
-      // Load orders from API
+      const { data } = await api.get('orders');
+
+      setOrders(
+        data.map((order: Food) => ({
+          ...order,
+          formattedPrice: formatValue(order.price),
+        })),
+      );
     }
 
     loadOrders();
